@@ -15,41 +15,50 @@ class Person:
         else:
             return
         pass
-    def setName (a_name):
+    def set_name(self, a_name):
         self.a_name = a_name
         print(self.a_name)
-        return 
-    def getName():
-        return self.a_name
-    def by_name (Q):
+    def get_name(self):
+        print(self.name)
+    def by_name (self,Q):
         Q = Q - NAME_WORDS
-        W = self.name
+        self.get_name()
         rez = []
         for a, b in product(Q,W):
             rez += [(compare(a,b),a,b)]
         return max(rez)[0]
-    def by_rost (Q):
+    def by_rost (self, Q):
         q_rost = max([int_val(q) for q in Q])
         if 'выше' in Q:
             return q_rost < self.rost
         if 'ниже' in Q:
             return q_rost > self.rost
         return q_rost + 5 >= self.rost >= q_rost - 5
-    def by_ves (Q):
+    def by_ves (self, Q):
         q_ves = max([int_val(q) for q in Q])
         if 'больше' in Q:
             return q_ves < self.ves
         if 'меньше' in Q:
             return q_ves > self.ves
         return q_ves + 5 >= self.ves >= q_ves - 5
-    def by_mesto_uch (Q):
+    def by_mesto_uch (self, Q):
         Q = Q - MESTO_WORDS
         W = self.mesto_uch
         rez = []
         for a, b in product(Q,W):
             rez += [(compare(a,b),a,b)]
         return max(rez)[0]
-    
+
+
+def fuzzy_compare(query):
+    q = set(query.split())
+    score = 0
+    for m, a in zip(
+        [NAME_WORDS, ROST_WORDS, VES_WORDS, MESTO_WORDS],
+        [Person.by_name, Person.by_rost, Person.by_ves, Person.by_mesto_uch]):
+        if m & q:
+            score += a(q)
+    return score > 0,49
 def compare(s1,s2):
     s1, s2 = [s.lower() for s in [s1, s2] ]
     ngrams = [ s1[i:i+3] for i in range(len(s1)) ]
@@ -62,16 +71,7 @@ def int_val(s):
         return int(s)
     except ValueError:
         return 0
-def fuzzy_compare(query):
-    q = set(query.split())
-    score = 0
-    for m, a in zip(
-        [NAME_WORDS, ROST_WORDS, VES_WORDS, MESTO_WORDS],
-        [Person.by_name, Person.by_rost, Person.by_ves, Person.by_mesto_uch]):
-        if m & q:
-            score += a(q)
-    return score > 0,49
-
+    
 
 NAME_WORDS = {'зовут', "имя"}
 ROST_WORDS = {"ростом", "рост выше", "рост ниже"}
