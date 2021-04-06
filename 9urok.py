@@ -1,12 +1,11 @@
-import numpy as np
+from random import choice
 from pprint import pprint
 
 
 def answer(q):
-    print(q)
     if "?" in q:
-        x = np.random.randint(low=100, size = 1)
-        if x > 50:
+        x = choice(['yes', 'no'])
+        if x == 'yes':
             pprint ("YES")
         else:
             pprint("NO")
