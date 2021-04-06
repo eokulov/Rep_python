@@ -10,6 +10,8 @@ def answer(q):
             pprint ("YES")
         else:
             pprint("NO")
+    else:
+	print('Это не вопрос')
 
 
 question = ''
